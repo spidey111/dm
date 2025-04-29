@@ -1,0 +1,41 @@
+import pandas as pd
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.preprocessing import StandardScaler
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+# Load your dataset (Iris dataset in this case)
+iris = load_iris()
+data = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+
+# Select features for clustering
+features = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+X = data[features]
+
+# Standardize the data (recommended for clustering algorithms)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Perform hierarchical clustering with 'ward' linkage
+hc = AgglomerativeClustering(n_clusters=3, linkage='ward')
+hc.fit(X_scaled)
+
+# Get cluster labels
+labels = hc.labels_
+
+# Visualize the dendrogram
+linked = linkage(X_scaled, method='ward')  # Use 'ward' linkage for hierarchical clustering
+plt.figure(figsize=(10, 7))
+dendrogram(linked, orientation='top', distance_sort='descending', show_leaf_counts=True)
+plt.title("Hierarchical Clustering Dendrogram")
+plt.xlabel("Data Points")
+plt.ylabel("Distance")
+plt.show()
+
+# Visualize the clusters (optional)
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=labels, cmap='viridis')
+plt.title("Hierarchical Clustering on Iris Dataset")
+plt.xlabel('Feature 1 (standardized)')
+plt.ylabel('Feature 2 (standardized)')
+plt.show()
