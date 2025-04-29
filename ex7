@@ -1,0 +1,23 @@
+# Import necessary libraries
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+from mlxtend.preprocessing import TransactionEncoder
+
+# Define the dataset
+dataset = [
+    ['milk', 'onion', 'bread', 'beans', 'eggs', 'yogurt'],
+    ['fish', 'onion', 'bread', 'beans', 'eggs', 'yogurt'],
+    ['milk', 'apples', 'beans', 'eggs'],
+    ['milk', 'sugar', 'tea', 'beans', 'yogurt'],
+    ['tea', 'onion', 'beans', 'ice', 'eggs']
+]
+
+# Initialize TransactionEncoder and transform the dataset
+tr = TransactionEncoder()
+tr_arr = tr.fit(dataset).transform(dataset)
+
+# Create a DataFrame from the transformed dataset
+df = pd.DataFrame(tr_arr, columns=tr.columns_)
+
+# Display the DataFrame
+print(df)
